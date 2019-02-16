@@ -1,5 +1,6 @@
 package io.jenkins.plugins.cascgroovy;
 
+import jenkins.model.Jenkins;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.EnvVars;
 import hudson.Extension;
@@ -14,7 +15,9 @@ import io.jenkins.plugins.casc.model.Sequence;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import groovy.lang.GroovyShell;
+import groovy.lang.Binding;
 
+import java.io.PrintWriter;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -67,8 +70,18 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
             try {
                 //Binding binding = new Binding();
                 //binding.setVariable("foo", new Integer(2));
-                GroovyShell shell = new GroovyShell();
-                shell.evaluate(script);
+                //GroovyShell shell = new GroovyShell();
+                //shell.evaluate(script);
+
+                Binding binding = new Binding();
+                //binding.setProperty("out",new PrintWriter(stdout,true));
+                //binding.setProperty("stdin",stdin);
+                //binding.setProperty("stdout",stdout);
+                //binding.setProperty("stderr",stderr);
+
+                GroovyShell groovy = new GroovyShell(Jenkins.getActiveInstance().getPluginManager().uberClassLoader, binding);
+                groovy.run(script, "Configuration-as-a-Code-Groovy", new ArrayList());
+
                 generated.add(true);
 
             } catch (Exception ex) {
