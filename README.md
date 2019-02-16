@@ -1,4 +1,4 @@
-# jcasc-groovy
+# configuration-as-code-groovy
 Extension for Jenkins Configuration-as-Code plugin that allows running Groovy scripts
 
 ## Run Groovy scripts

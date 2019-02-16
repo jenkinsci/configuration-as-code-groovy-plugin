@@ -1,4 +1,4 @@
-package io.jenkins.plugins.jcascgroovy;
+package io.jenkins.plugins.cascgroovy;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.EnvVars;

@@ -1,4 +1,4 @@
-package io.jenkins.plugins.jcascgroovy;
+package io.jenkins.plugins.cascgroovy;
 
 import hudson.Extension;
 import hudson.model.Descriptor;

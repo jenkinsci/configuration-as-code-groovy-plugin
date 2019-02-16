@@ -1,4 +1,4 @@
-package io.jenkins.plugins.jcascgroovy;
+package io.jenkins.plugins.cascgroovy;
 
 import io.jenkins.plugins.casc.Configurable;
 import io.jenkins.plugins.casc.ConfiguratorException;
