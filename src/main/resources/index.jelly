@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    TODO
+    Extension for Configuration as Code that allows running Groovy scripts.
 </div>

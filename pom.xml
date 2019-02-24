@@ -17,7 +17,7 @@
         <useBeta>true</useBeta>
         <access-modifier-checker.skip>true</access-modifier-checker.skip>
     </properties>
-    <name>Configuration as Code Support Plugin Groovy Scripting Extension</name>
+    <name>Configuration as Code Plugin - Groovy Scripting Extension</name>
     <description>Plugin that extends JCasC with Groovy scripts execution</description>
     <developers>
         <developer>
