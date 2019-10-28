@@ -19,6 +19,7 @@
     </properties>
     <name>Configuration as Code Plugin - Groovy Scripting Extension</name>
     <description>Plugin that extends JCasC with Groovy scripts execution</description>
+    <url>https://github.com/jenkinsci/configuration-as-code-groovy-plugin</url>
     <developers>
         <developer>
             <id>szandala</id>
