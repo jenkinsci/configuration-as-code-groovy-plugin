@@ -1,4 +1,5 @@
-# configuration-as-code-groovy
+# Configuration as Code Plugin - Groovy Scripting Extension
+
 Extension for Jenkins Configuration-as-Code plugin that allows running Groovy scripts
 
 ## Run Groovy scripts
