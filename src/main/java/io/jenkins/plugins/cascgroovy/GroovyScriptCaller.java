@@ -1,36 +1,28 @@
 package io.jenkins.plugins.cascgroovy;
 
-import jenkins.model.Jenkins;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import hudson.EnvVars;
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 import hudson.Extension;
-import io.jenkins.plugins.casc.Attribute;
-import io.jenkins.plugins.casc.ConfigurationContext;
-import io.jenkins.plugins.casc.ConfiguratorException;
-import io.jenkins.plugins.casc.Configurator;
-import io.jenkins.plugins.casc.RootElementConfigurator;
+import io.jenkins.plugins.casc.*;
 import io.jenkins.plugins.casc.impl.attributes.MultivaluedAttribute;
 import io.jenkins.plugins.casc.model.CNode;
-import io.jenkins.plugins.casc.model.Sequence;
+import io.jenkins.plugins.casc.model.Mapping;
+import jenkins.model.Jenkins;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
-import groovy.lang.GroovyShell;
-import groovy.lang.Binding;
 
-import java.io.PrintWriter;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static io.vavr.API.Try;
+import static io.vavr.API.unchecked;
 
 
 /**
  * @author <a href="mailto:tomasz.szandala@gmail.com">Tomasz Szandala</a>
  */
-@Extension(optional = true)
+@Extension(optional = true, ordinal = -50)
 @Restricted(NoExternalUse.class)
 public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
@@ -56,40 +48,35 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
     @Override
     public Boolean[] configure(CNode config, ConfigurationContext context) throws ConfiguratorException {
-        //JenkinsJobManagement mng = new JenkinsJobManagement(System.out, new EnvVars(), null, null, LookupStrategy.JENKINS_ROOT);
-        final Sequence sources = config.asSequence();
-        final Configurator<GroovyScriptSource> con = context.lookup(GroovyScriptSource.class);
-        List<Boolean> generated = new ArrayList<>();
-        for (CNode source : sources) {
-            final String script;
-            try {
-                script = con.configure(source, context).getScript();
-            } catch (IOException e) {
-                throw new ConfiguratorException(this, "Failed to retrieve Groovy script", e);
-            }
-            try {
-                //Binding binding = new Binding();
-                //binding.setVariable("foo", new Integer(2));
-                //GroovyShell shell = new GroovyShell();
-                //shell.evaluate(script);
-
-                Binding binding = new Binding();
-                //binding.setProperty("out",new PrintWriter(stdout,true));
-                //binding.setProperty("stdin",stdin);
-                //binding.setProperty("stdout",stdout);
-                //binding.setProperty("stderr",stderr);
-
-                GroovyShell groovy = new GroovyShell(Jenkins.getActiveInstance().getPluginManager().uberClassLoader, binding);
-                groovy.run(script, "Configuration-as-Code-Groovy", new ArrayList());
-
-                generated.add(true);
-
-            } catch (Exception ex) {
-                throw new ConfiguratorException(this, "Failed to execute script with hash " + script.hashCode(), ex);
-            }
-        }
-        return generated.toArray(new Boolean[generated.size()]);
+        final Configurator<GroovyScriptSource> c = context.lookup(GroovyScriptSource.class);
+        return config.asSequence().stream()
+            .map(source -> getActualValue(source, context))
+            .map(source -> Try(() -> c.configure(source, context).getScript())
+                                .onSuccess(GroovyScriptCaller.this::runGroovyShell)
+                                .isSuccess())
+            .toArray(Boolean[]::new);
     }
+
+    private CNode getActualValue(CNode source, ConfigurationContext context) {
+        return unchecked(() -> source.asMapping().entrySet().stream().findFirst()).apply()
+            .map(entry -> resolveSourceOrGetValue(entry, context))
+            .orElse(source);
+    }
+
+    private CNode resolveSourceOrGetValue(Map.Entry<String, CNode> entry, ConfigurationContext context) {
+        final Mapping m = new Mapping();
+        m.put(
+            entry.getKey(),
+            SecretSourceResolver.resolve(context, unchecked(() -> entry.getValue().asScalar().getValue()).apply())
+        );
+        return m;
+    }
+
+    private void runGroovyShell(String script) {
+        final GroovyShell s = new GroovyShell(Jenkins.getActiveInstance().getPluginManager().uberClassLoader, new Binding());
+        unchecked(() -> s.run(script, "Configuration-as-Code-Groovy", new ArrayList()));
+    }
+
 
     @Override
     public Boolean[] check(CNode config, ConfigurationContext context) throws ConfiguratorException {
@@ -99,7 +86,7 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
     @Nonnull
     @Override
-    public List<Configurator> getConfigurators(ConfigurationContext context) {
+    public List<Configurator<Boolean[]>> getConfigurators(ConfigurationContext context) {
         return Collections.singletonList(context.lookup(GroovyScriptSource.class));
     }
 
@@ -108,4 +95,5 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
     public CNode describe(Boolean[] instance, ConfigurationContext context) throws Exception {
         return null;
     }
+
 }
