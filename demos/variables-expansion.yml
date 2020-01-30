@@ -1,0 +1,20 @@
+
+# Using jCasC secret expansion feature  
+# Secrets are loaded from :
+#  - Docker secrets
+#  - Kubernetes/Openshift secrets
+#  - HashiCorp Vault
+#  - Environment variables
+#
+# cf: https://github.com/jenkinsci/configuration-as-code-plugin/blob/master/docs/features/secrets.adoc
+
+groovy:
+
+  # Asuming secret value is stored in variable named API_KEY
+  - url: https://my.web.site.com/path/to/my/resource?api_key=${API_KEY}
+  # Same with basic auth example
+  - url: https://${USER}:${PASS}@my.web.site.com/path/to/my/resource
+
+  # Asuming secret value is stored in variable named SECRET
+  - script: >
+      println "Displaying my secret : ${SECRET}";
