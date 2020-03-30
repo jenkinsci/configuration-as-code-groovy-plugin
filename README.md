@@ -6,7 +6,7 @@ Extension for Jenkins Configuration-as-Code plugin that allows running Groovy sc
 
 Configuration-as-Code can run Groovy scripts.
 
-Groovy scripts cen be:
+Groovy scripts can be:
  * inline, with entry `script`
  * from `url`
  * from local file, using `file`
