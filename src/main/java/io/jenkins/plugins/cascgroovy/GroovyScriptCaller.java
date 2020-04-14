@@ -80,7 +80,7 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
                 //binding.setProperty("stderr",stderr);
 
                 GroovyShell groovy = new GroovyShell(Jenkins.getActiveInstance().getPluginManager().uberClassLoader, binding);
-                groovy.run(script, "Configuration-as-Code-Groovy", new ArrayList());
+                groovy.run(script, "ConfigurationAsCodeGroovy", new ArrayList());
 
                 generated.add(true);
 
