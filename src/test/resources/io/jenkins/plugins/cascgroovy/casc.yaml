@@ -1,0 +1,8 @@
+groovy:
+    - script: |
+        import jenkins.model.Jenkins;
+
+        def systemMessage = "Hello World";
+        def jenkins = Jenkins.get();
+        jenkins.setSystemMessage(systemMessage);
+        jenkins.save();
