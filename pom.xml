@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>3.18</version>
+        <version>4.12</version>
         <relativePath />
     </parent>
     <groupId>io.jenkins.plugins</groupId>
@@ -12,10 +12,9 @@
     <version>1.2-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <properties>
-        <jenkins.version>2.60.3</jenkins.version>
+        <jenkins.version>2.222</jenkins.version>
         <java.level>8</java.level>
-        <useBeta>true</useBeta>
-        <access-modifier-checker.skip>true</access-modifier-checker.skip>
+        <configuration-as-code.version>1.42</configuration-as-code.version>
     </properties>
     <name>Configuration as Code Plugin - Groovy Scripting Extension</name>
     <description>Plugin that extends JCasC with Groovy scripts execution</description>
@@ -26,6 +25,10 @@
             <name>Tomasz Szandala</name>
             <email>tomasz.szandala@gmail.com</email>
         </developer>
+        <developer>
+            <id>jetersen</id>
+            <name>Joseph Petersen</name>
+        </developer>  
     </developers>
     <licenses>
         <license>
@@ -33,14 +36,12 @@
             <url>http://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
-    <!-- Assuming you want to host on @jenkinsci: -->
-    <!-- <url>http://wiki.jenkins.io/display/JENKINS/TODO+Plugin</url> -->
     <scm>
-    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
-      <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+        <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <repositories>
         <repository>
@@ -58,7 +59,12 @@
         <dependency>
             <groupId>io.jenkins</groupId>
             <artifactId>configuration-as-code</artifactId>
-            <version>1.0</version>
+            <version>${configuration-as-code.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jenkins.configuration-as-code</groupId>
+            <artifactId>test-harness</artifactId>
+            <version>${configuration-as-code.version}</version>
         </dependency>
     </dependencies>
 </project>
