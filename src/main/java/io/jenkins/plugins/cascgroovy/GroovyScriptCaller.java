@@ -74,7 +74,7 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
     private void runGroovyShell(String script) {
         final GroovyShell s = new GroovyShell(Jenkins.getActiveInstance().getPluginManager().uberClassLoader, new Binding());
-        unchecked(() -> s.run(script, "Configuration-as-Code-Groovy", new ArrayList()));
+        unchecked(() -> s.run(script, "ConfigurationAsCodeGroovy", new ArrayList()));
     }
 
 
