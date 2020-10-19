@@ -22,7 +22,7 @@ import static io.vavr.API.unchecked;
 /**
  * @author <a href="mailto:tomasz.szandala@gmail.com">Tomasz Szandala</a>
  */
-@Extension(optional = true, ordinal = -50)
+@Extension(optional = true, ordinal = -60) // Ordinal -60 Ensure it is loaded after JobDSL
 @Restricted(NoExternalUse.class)
 public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
