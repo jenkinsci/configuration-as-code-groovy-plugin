@@ -1,1 +1,7 @@
-buildPlugin(jenkinsVersions: [null, "2.249.2"], timeout: 180)
+buildPlugin(
+  forkCount: '1C',
+  useContainerAgent: true,
+  configurations: [
+    [platform: 'linux', jdk: 21],
+    [platform: 'windows', jdk: 17],
+])
