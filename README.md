@@ -25,3 +25,5 @@ groovy:
 
  * It is recommended to use semicolons at the end of lines
  * There is no dry run implemented for Groovy scripts feature
+
+test
