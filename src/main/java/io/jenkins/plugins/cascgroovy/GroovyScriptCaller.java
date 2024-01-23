@@ -99,7 +99,7 @@ public class GroovyScriptCaller implements RootElementConfigurator<Boolean[]> {
 
     @Nonnull
     @Override
-    public List<Configurator> getConfigurators(ConfigurationContext context) {
+    public List<Configurator<Boolean[]>> getConfigurators(ConfigurationContext context) {
         return Collections.singletonList(context.lookup(GroovyScriptSource.class));
     }
 
